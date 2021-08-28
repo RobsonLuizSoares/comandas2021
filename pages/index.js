@@ -1,12 +1,10 @@
-
-
-import { Spinner, Center, Container } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
+import { Spinner, Center, Container } from "@chakra-ui/react"
 import { Login, Comandas } from "./../components"
 import firebase from "./../config/firebaseClient"
 
 
-export default function Home() {
+const Home = () => {
   const [auth, setAuth] = useState({
     loading: true,
     user: false
@@ -35,3 +33,5 @@ export default function Home() {
     </>
   )
 }
+
+export default Home
