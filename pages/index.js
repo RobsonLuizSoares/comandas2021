@@ -1,43 +1,37 @@
-import Link from 'next/link'
 
-import {
-  Box,
-  Container,
-  Text,
-  Center,
-  FormControl,
-  FormLabel,
-  Input,
-  Button,
-  FormHelperText,
-} from "@chakra-ui/react";
 
+import { Spinner, Center, Container } from "@chakra-ui/react"
+import { useEffect, useState } from "react"
+import { Login, Comandas } from "./../components"
+import firebase from "./../config/firebaseClient"
 
 
 export default function Home() {
+  const [auth, setAuth] = useState({
+    loading: true,
+    user: false
+  })
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      setAuth({
+        loading: false,
+        user
+      })
+    })
+  }, [])
 
-  return (
-    <>
-      <Container mt={12} p={12} mx='auto' maxW='container.lg' bg='gray.100'>
+  if (auth.loading) {
+    return (
+      <Container mt='60px'>
         <Center>
-          <Text>Sistema de Gerenciamento de Produtos e Serviços</Text>
+          <Spinner />
         </Center>
       </Container>
-      <Container mt={12} p={12} justifyContent="space-between" maxW="container.sm" display='flex' backgroundColor='gray.100' >
-        <Link href='/login'>
-          <a>
-            <Box p={6} backgroundColor='twitter.200'>
-              Acessar o Sistema
-            </Box>
-          </a>
-        </Link>
-        <Link href='/signup'>
-          <a>
-            <Box p={6} backgroundColor='whatsapp.200'>Cadastrar no Sistema</Box>
-          </a>
-        </Link>
-      </Container>
-
+    )
+  }
+  return (
+    <>
+      {auth.user ? <Comandas /> : <Login />}
     </>
   )
 }
