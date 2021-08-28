@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 
 const validationSchema = yup.object().shape({
+  username: yup.string().required('Escolha um nome de Usuário'),
   email: yup.string().email('Email inválido').required('Preencha seu email'),
   password: yup.string().required('Preencha sua senha')
 })
@@ -32,10 +33,11 @@ export default function SignUp() {
   } = useFormik({
     onSubmit: async (values) => {
       const user = await firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
-      console.log(user)
+      console.log(user.user)
     },
     validationSchema,
     initialValues: {
+      username: '',
       email: '',
       password: ''
     }
@@ -55,6 +57,19 @@ export default function SignUp() {
         </Center>
 
         <Container p={5}>
+          <Box p={5}>
+            <FormControl id="username">
+              <FormLabel>Nome de Usuário</FormLabel>
+              <Input
+                type="text"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {touched.email && <FormHelperText textColor="tomato">{errors.username}</FormHelperText>}
+            </FormControl>
+          </Box>
+
           <Box p={5}>
             <FormControl id="email">
               <FormLabel>Email</FormLabel>
